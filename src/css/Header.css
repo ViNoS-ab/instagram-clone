@@ -1,0 +1,47 @@
+.header {
+  margin-bottom: 15px;
+  background: white;
+  object-fit: contain;
+  padding: 0px 40px 0px 100px;
+  height: 54px;
+  border-bottom: 1px solid lightgray;
+  display: flex;
+  position: sticky;
+  top: 0;
+  position: -webkit-sticky;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+}
+
+.header__image {
+  object-fit: contain;
+}
+
+.header__addPost {
+  border-radius: 50%;
+  height: 35px;
+  cursor: pointer;
+  transition-delay: 2s;
+}
+
+.header__addPost img {
+  height: 100%;
+}
+
+.header__addPost:hover {
+  background: #bbbaba;
+}
+.header__links {
+  display: flex;
+  flex-direction: row;
+}
+.header__links > div {
+  margin-left: 5px;
+}
+
+@media only screen and (max-width: 700px) {
+  .header {
+    padding: 0px 10px 0px 10px;
+  }
+}

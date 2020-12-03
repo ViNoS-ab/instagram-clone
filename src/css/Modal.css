@@ -1,0 +1,8 @@
+.modal__signup {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal__signupNoName {
+  color: #ff0000;
+}
