@@ -17,10 +17,20 @@
 .header__image {
   object-fit: contain;
 }
+.header__links {
+  display: flex;
+  flex-direction: row;
+}
+.header__links > div {
+  margin-left: 15px;
+}
+.header__avatar {
+  cursor: pointer;
+}
 
 .header__addPost {
   border-radius: 50%;
-  height: 35px;
+  height: 23px;
   cursor: pointer;
   transition-delay: 2s;
 }
@@ -32,16 +42,46 @@
 .header__addPost:hover {
   background: #bbbaba;
 }
-.header__links {
+.header__profileOptionMain {
+  outline: none;
+  right: 10px;
+  width: 200px;
+  top: 50px;
+  position: absolute;
+  transform: translateY(10px);
+  transition-duration: 0.4s;
+}
+.header__profileOption {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  -webkit-box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.0975);
+  box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.0975);
+  background: #fff;
+  z-index: 3;
+  border-radius: 6px;
 }
-.header__links > div {
-  margin-left: 5px;
+.header__rotateDiv {
+  width: 14px;
+  height: 14px;
+  transform: rotate(45deg);
+  position: absolute;
+  left: 147px;
+  top: -6px;
+  box-shadow: -3px -3px 5px 0px rgba(0, 0, 0, 0.0975);
+  -webkit-box-shadow: -3px -3px 5px 0px rgba(0, 0, 0, 0.0975);
+  bottom: 0;
+  background: #fff;
+  border: 1px solid #fff;
 }
-
 @media only screen and (max-width: 700px) {
   .header {
     padding: 0px 10px 0px 10px;
+  }
+  .header__rotateDiv {
+    left: 145px;
+  }
+  .header__profileOptionMain {
+    right: 0;
+    width: 180px;
   }
 }
