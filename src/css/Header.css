@@ -1,6 +1,6 @@
 .header {
   margin-bottom: 15px;
-  background: white;
+  background: #fff;
   object-fit: contain;
   padding: 0px 40px 0px 100px;
   height: 54px;
@@ -24,9 +24,6 @@
 .header__links > div {
   margin-left: 15px;
 }
-.header__avatar {
-  cursor: pointer;
-}
 
 .header__addPost {
   border-radius: 50%;
@@ -42,15 +39,21 @@
 .header__addPost:hover {
   background: #bbbaba;
 }
+
+.header__avatar {
+  cursor: pointer;
+}
+
 .header__profileOptionMain {
   outline: none;
   right: 10px;
   width: 200px;
   top: 50px;
   position: absolute;
-  transform: translateY(10px);
   transition-duration: 0.4s;
+  transition: opacity 0.4s 0s, transform 0.4s 0.2s;
 }
+
 .header__profileOption {
   display: flex;
   flex-direction: column;
@@ -65,7 +68,7 @@
   height: 14px;
   transform: rotate(45deg);
   position: absolute;
-  left: 147px;
+  left: 150px;
   top: -6px;
   box-shadow: -3px -3px 5px 0px rgba(0, 0, 0, 0.0975);
   -webkit-box-shadow: -3px -3px 5px 0px rgba(0, 0, 0, 0.0975);
@@ -73,12 +76,13 @@
   background: #fff;
   border: 1px solid #fff;
 }
+
 @media only screen and (max-width: 700px) {
   .header {
     padding: 0px 10px 0px 10px;
   }
   .header__rotateDiv {
-    left: 145px;
+    left: 150px;
   }
   .header__profileOptionMain {
     right: 0;

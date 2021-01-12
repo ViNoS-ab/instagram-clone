@@ -1,5 +1,5 @@
 import { Avatar, Button } from "@material-ui/core";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { auth } from "./firebase";
 import { Link, useLocation } from "react-router-dom";
 import SignUp from "./Modal";
@@ -9,20 +9,33 @@ import ImageUpload from "./ImageUpload";
 import homeImg from "../assets/home.svg";
 import homeHovImg from "../assets/homeHov.svg";
 
-const avatarStyle = {
-  height: "23px",
-  width: "23px",
-};
-
 const Header = ({ user, setUser }) => {
   const [isOpen, setisOpen] = useState(false);
   const [isLogOpen, setIsLogOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
-  const [profileOption, setProfileOption] = useState(false);
+  const [isProfileOption, setIsProfileOption] = useState(false);
   const optionContain = useRef(null);
 
   let location = useLocation();
 
+  const avatarStyle =
+    location.pathname === "/profile"
+      ? {
+          height: "20px",
+          width: "20px",
+          border: "2px solid #424242",
+          padding: "1px",
+          marginLeft: "12px",
+        }
+      : {
+          height: "23px",
+          width: "23px",
+        };
+
+  useEffect(() => {
+    if (location.pathname === "/profile") {
+    }
+  });
   return (
     <div className="header">
       <Link to="/">
@@ -49,27 +62,37 @@ const Header = ({ user, setUser }) => {
           >
             <img src={addPost} alt="add post" />
           </div>
+
           <Avatar
             className="header__avatar"
             style={avatarStyle}
             src={user.photoURL}
+            children={user?.displayName?.split("")[0]}
             alt="username"
-            children={user.username}
             onClick={() => {
-              setProfileOption(true);
-              optionContain.current.focus();
+              setIsProfileOption(true);
+              optionContain?.current?.toggleAttribute("hidden");
+              optionContain?.current?.focus();
             }}
           />
+
           <div
+            hidden={true}
             ref={optionContain}
             tabIndex="0"
             style={
-              profileOption
-                ? { opacity: "1", transform: "scale(1) translateY(10px)" }
-                : { opacity: "0", transform: "scale(0) translateY(0px)" }
+              isProfileOption
+                ? { opacity: "1", transform: "translateY(8px)" }
+                : { opacity: "0", transform: "translateY(0px)" }
             }
             className="header__profileOptionMain"
-            onBlur={() => setProfileOption(false)}
+            onBlur={() => {
+              setTimeout(() => {
+                optionContain?.current?.setAttribute("hidden", true);
+                optionContain?.current?.focus();
+              }, 400);
+              setIsProfileOption(false);
+            }}
           >
             <div className="header__rotateDiv"></div>
             <div className="header__profileOption">

@@ -44,8 +44,8 @@ const Profile = ({ user, posts }) => {
                 style={avatarStyle}
                 className="profile__avatar"
                 src={user.photoURL}
+                children={user.displayName}
                 alt="avatar"
-                children={user.dsplayName}
               />
             </div>
             <div className="profile__infoText">
