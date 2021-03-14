@@ -3,7 +3,8 @@ import firebase from "firebase";
 import { Avatar } from "@material-ui/core";
 import "../css/Post.css";
 import { db } from "./firebase";
-import preload from "../assets/preload.jpg";
+// import preload from "../assets/preload.jpg";
+import useGetData from "./useGetData";
 
 const avatarStyle = {
   height: "32px",
@@ -13,7 +14,8 @@ const avatarStyle = {
 const Post = ({ user, image, username, caption, postId }) => {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
-  const [showImg, setShowImg] = useState(true);
+
+  const { documents: post } = useGetData(10, postId);
 
   const postComment = (e) => {
     e.preventDefault();
@@ -27,21 +29,13 @@ const Post = ({ user, image, username, caption, postId }) => {
 
   useEffect(() => {
     if (postId) {
-      (async () => {
-        db.collection("posts")
-          .doc(postId)
-          .collection("comments")
-          .orderBy("createdAt", "desc")
-          .onSnapshot((snap) => {
-            setComments(
-              snap.docs.map((doc) => {
-                return { id: doc.id, comment: doc.data() };
-              })
-            );
-          });
-      })().then(() => setShowImg(false));
+      setComments(
+        post.map((doc) => {
+          return { id: doc.id, comment: doc.data() };
+        })
+      );
     }
-  }, [postId]);
+  }, [postId, post]);
 
   return (
     <div className="post">
@@ -55,7 +49,7 @@ const Post = ({ user, image, username, caption, postId }) => {
         <h4 className="post__username">{username}</h4>
       </div>
 
-      <img className="post__image" src={showImg ? preload : image} alt="post" />
+      <img className="post__image" src={image} alt="post" />
 
       <h4 className="post__text">
         <strong> {caption && username} </strong> {caption}

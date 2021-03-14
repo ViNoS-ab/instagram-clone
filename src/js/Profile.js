@@ -1,15 +1,26 @@
-import { Avatar, Button, Input, InputLabel } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { auth, firebase } from "./firebase";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Input,
+  InputLabel,
+  Modal,
+} from "@material-ui/core";
+import React, { useEffect, useRef, useState } from "react";
+import { auth, firebase, storage } from "./firebase";
 import "../css/Profile.css";
+import addProfiePic from "../assets/addProfilePic.png";
 
 const avatarSizeSmall = { width: "90px", height: "90px" };
-const avatarSize = { width: "150px", height: "150px" };
+const avatarSize = { width: "10rem", height: "10rem" };
 
 const Profile = ({ user, posts }) => {
   const [myPosts, setMyPosts] = useState([]);
   const [postCount, setPostCount] = useState(0);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+  const [isChangePhotoOpen, setIsChangePhotoOpen] = useState(false);
+  const [image, setImage] = useState(null);
+  const fileRef = useRef(null);
   const [avatarStyle, setAvatarStyle] = useState(
     window.innerWidth > 700 ? avatarSize : avatarSizeSmall
   );
@@ -19,6 +30,33 @@ const Profile = ({ user, posts }) => {
     setAvatarStyle(avatarSizeSmall);
   };
 
+  const removeProfilePic = () => {
+    user.updateProfile({ photoURL: null });
+  };
+
+  const changeProfilePic = () => {
+    if (!image) return;
+    const uploadTask = storage
+      .ref(`avatars/${image.name + image.lastModifiedDate + image.size}`)
+      .put(image);
+    uploadTask.on(
+      "state_changed",
+      (snpashot) => {},
+      (err) => {
+        console.log(err);
+        alert(err.message);
+      },
+      () => {
+        storage
+          .ref("avatars")
+          .child(image.name + image.lastModifiedDate + image.size)
+          .getDownloadURL()
+          .then((url) => {
+            user.updateProfile({ photoURL: url });
+          });
+      }
+    );
+  };
   useEffect(() => {
     window.addEventListener("resize", resizeAvatar);
 
@@ -40,13 +78,29 @@ const Profile = ({ user, posts }) => {
         <div className="profile__wrapper">
           <div className="profile__info">
             <div className="profile__avatarContainer">
-              <Avatar
-                style={avatarStyle}
-                className="profile__avatar"
-                src={user.photoURL}
-                children={user.displayName}
-                alt="avatar"
-              />
+              <Badge
+                className="profile__avatarBadge"
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                badgeContent={
+                  <img
+                    onClick={() => setIsChangePhotoOpen(true)}
+                    className="profile__avatarImgBadge"
+                    src={addProfiePic}
+                    alt="add profile pic"
+                  />
+                }
+              >
+                <Avatar
+                  style={avatarStyle}
+                  className="profile__avatar"
+                  src={user.photoURL}
+                  area-label="avatar"
+                />
+              </Badge>
             </div>
             <div className="profile__infoText">
               <div className="profile__infoTextLine1">
@@ -79,6 +133,42 @@ const Profile = ({ user, posts }) => {
           </div>
         </div>
       </div>
+
+      <Modal
+        open={isChangePhotoOpen}
+        onClose={() => setIsChangePhotoOpen(false)}
+      >
+        <div className="modals profile__changePhotoModal">
+          <h3>Change Profile Picture</h3>
+          <input
+            type="file"
+            ref={fileRef}
+            style={{ display: "none" }}
+            onChange={(e) => {
+              if (e.target.files[0]) setImage(e.target.files[0]);
+              changeProfilePic();
+            }}
+          />
+          <Button
+            style={{ color: "#0095f6", fontWeight: 700 }}
+            onClick={() => fileRef.current.click()}
+          >
+            Upload Photo
+          </Button>
+          <Button
+            style={{ color: "#ed4956", fontWeight: 700 }}
+            onClick={removeProfilePic}
+          >
+            Remove Current Photo
+          </Button>
+          <Button
+            className="profile__CancelBtn"
+            onClick={() => setIsChangePhotoOpen(false)}
+          >
+            Cancel
+          </Button>
+        </div>
+      </Modal>
     </>
   );
 };

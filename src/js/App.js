@@ -5,6 +5,8 @@ import "../css/App.css";
 import Header from "./header";
 import Post from "./Post";
 import Profile from "./Profile";
+import useGetData from "./useGetData";
+import { Button } from "@material-ui/core";
 
 const postId = "rf0MU0nJIVVkBhUWMrzV";
 
@@ -13,6 +15,9 @@ function App() {
   const [user, setUser] = useState(null);
   const [sidePost, setSidePost] = useState(null);
 
+  const { documents, increasePostLimit } = useGetData(4);
+
+  //load a specific post using it's id
   useEffect(() => {
     (async () => {
       const thatPost = await db.collection("posts").doc(postId).get();
@@ -20,20 +25,17 @@ function App() {
     })();
   }, []);
 
+  // gets all posts
   useEffect(() => {
-    db.collection("posts")
-      .orderBy("createdAt", "desc")
-      .onSnapshot((snap) => {
-        setPosts(
-          snap.docs.map((doc) => {
-            return {
-              id: doc.id,
-              post: doc.data(),
-            };
-          })
-        );
-      });
-  }, []);
+    setPosts(
+      documents.map((doc) => {
+        return {
+          id: doc.id,
+          post: doc.data(),
+        };
+      })
+    );
+  }, [documents]);
 
   return (
     <>
@@ -66,6 +68,7 @@ function App() {
                     />
                   );
                 })}
+                <Button onClick={increasePostLimit}>load previous posts</Button>
               </div>
             </div>
           </Route>

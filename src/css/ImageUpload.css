@@ -1,19 +1,8 @@
 .imageUpload {
   overflow-y: scroll;
-  display: flex;
-  position: absolute;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   width: 60%;
   max-width: 600px;
   height: 80%;
-  margin: 10px auto 10px auto;
-  background: #fff;
-  border-top: 1px lightgray;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .imageUpload__progress {
@@ -36,7 +25,8 @@
 
 .imageUpload__caption,
 .imageUpload__file,
-.imageUpload__progress {
+.imageUpload__progress,
+.imageUpload__button {
   max-width: 100%;
   width: 400px;
 }

@@ -18,6 +18,39 @@
   padding-left: 100px;
 }
 
+.profile__avatarImgBadge {
+  width: 40px;
+  height: 40px;
+  background: #fafafa;
+  border-radius: 50%;
+  transition: 0.4s;
+  transform: scale(0);
+}
+.profile__avatarBadge {
+  transition: 0.4s;
+}
+
+.profile__avatarBadge:hover .profile__avatarImgBadge {
+  transform: scale(1);
+}
+
+.profile__changePhotoModal {
+  border-radius: 4%;
+  width: 25rem;
+}
+
+.profile__changePhotoModal button {
+  padding: 13px;
+  width: 100%;
+  font-size: 14px;
+  border-top: 1px lightgray solid;
+  text-transform: none;
+}
+.profile__changePhotoModal h3 {
+  font-weight: 600;
+  margin: 30px;
+  color: #262626;
+}
 .profile__infoText {
   flex-basis: 30px;
   flex-grow: 2;
@@ -83,7 +116,19 @@
 .updateProfile {
   display: flex;
   flex-direction: column;
+  height: 0;
+  overflow: hidden;
+  animation: heightGrowth 0.7s;
 }
+@keyframes heightGrowth {
+  from {
+    height: 0;
+  }
+  to {
+    height: 100%;
+  }
+}
+
 .updateProfile > p {
   margin: 7px;
   font-size: 14px;

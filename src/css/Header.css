@@ -27,9 +27,9 @@
 
 .header__addPost {
   border-radius: 50%;
-  height: 23px;
+  height: 25px;
   cursor: pointer;
-  transition-delay: 2s;
+  transition-duration: 0.4s;
 }
 
 .header__addPost img {
@@ -37,7 +37,8 @@
 }
 
 .header__addPost:hover {
-  background: #bbbaba;
+  background: #bababa;
+  transform: scale(1.1);
 }
 
 .header__avatar {

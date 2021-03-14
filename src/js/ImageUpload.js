@@ -58,7 +58,7 @@ const ImageUpload = ({ user, username, isOpen, setisOpen }) => {
 
   return (
     <Modal open={isOpen} onClose={() => setisOpen(false)}>
-      <div className="imageUpload">
+      <div className="imageUpload modals">
         {image && imageSrc && (
           <img className="imageUpload__preview" src={imageSrc} alt="preview" />
         )}
@@ -67,7 +67,7 @@ const ImageUpload = ({ user, username, isOpen, setisOpen }) => {
           value={progress}
           max="100"
         />
-        <input
+        <textarea
           className="imageUpload__caption"
           type="text"
           placeholder="enter a caption"
@@ -79,7 +79,9 @@ const ImageUpload = ({ user, username, isOpen, setisOpen }) => {
           type="file"
           onChange={handleChange}
         />
-        <Button onClick={handleUpload}>Upload</Button>
+        <Button className="imageUpload__button" onClick={handleUpload}>
+          Upload
+        </Button>
       </div>
     </Modal>
   );
