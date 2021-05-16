@@ -46,6 +46,7 @@ const ImageUpload = ({ user, username, isOpen, setisOpen }) => {
               caption,
               uid: user.uid,
               createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              avatar: user.photoURL || null,
             });
           });
         setImage(null);

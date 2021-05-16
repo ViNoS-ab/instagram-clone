@@ -11,7 +11,7 @@ const avatarStyle = {
   width: "32px",
 };
 
-const Post = ({ user, image, username, caption, postId }) => {
+const Post = ({ user, avatar, image, username, caption, postId }) => {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
 
@@ -19,11 +19,15 @@ const Post = ({ user, image, username, caption, postId }) => {
 
   const postComment = (e) => {
     e.preventDefault();
-    db.collection("posts").doc(postId).collection("comments").add({
-      text: comment,
-      username: user.displayName,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    db.collection("posts")
+      .doc(postId)
+      .collection("comments")
+      .add({
+        text: comment,
+        username: user.displayName,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        avatar: user.photoURL || null,
+      });
     setComment("");
   };
 
@@ -44,6 +48,7 @@ const Post = ({ user, image, username, caption, postId }) => {
           style={avatarStyle}
           className="post__avatar"
           alt="username"
+          src={avatar}
           children={username}
         />
         <h4 className="post__username">{username}</h4>

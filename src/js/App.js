@@ -56,18 +56,21 @@ function App() {
                 />
               </div>
               <div className="app__postsLeft">
-                {posts.map(({ id, post: { image, username, caption } }) => {
-                  return (
-                    <Post
-                      user={user}
-                      postId={id}
-                      key={id}
-                      image={image}
-                      username={username}
-                      caption={caption}
-                    />
-                  );
-                })}
+                {posts.map(
+                  ({ id, post: { image, username, caption, avatar } }) => {
+                    return (
+                      <Post
+                        user={user}
+                        postId={id}
+                        key={id}
+                        image={image}
+                        username={username}
+                        caption={caption}
+                        avatar={avatar}
+                      />
+                    );
+                  }
+                )}
                 <Button onClick={increasePostLimit}>load previous posts</Button>
               </div>
             </div>
