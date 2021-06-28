@@ -1,0 +1,20 @@
+.avatarModal {
+  padding: 20px;
+}
+
+.avatarModal__ImgWrap {
+  margin: 5px;
+  height: 25rem;
+  width: 25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid lightgray;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.avatarModal__img {
+  height: 100%;
+  width: 100%;
+}

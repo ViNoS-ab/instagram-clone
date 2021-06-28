@@ -7,9 +7,11 @@ import {
   Modal,
 } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
-import { auth, firebase, storage } from "./firebase";
+import { auth, firebase } from "./firebase";
 import "../css/Profile.css";
 import addProfiePic from "../assets/addProfilePic.png";
+import Confirm from "./Confirm";
+import AvatarModal from "./AvatarModal";
 
 const avatarSizeSmall = { width: "90px", height: "90px" };
 const avatarSize = { width: "10rem", height: "10rem" };
@@ -19,6 +21,8 @@ const Profile = ({ user, posts }) => {
   const [postCount, setPostCount] = useState(0);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
   const [isChangePhotoOpen, setIsChangePhotoOpen] = useState(false);
+  const [isRemoveOpen, setIsRemoveOpen] = useState(false);
+  const [isUploadAvatarOpen, setIsUploadAvatarOpen] = useState(false);
   const [image, setImage] = useState(null);
   const fileRef = useRef(null);
   const [avatarStyle, setAvatarStyle] = useState(
@@ -32,31 +36,9 @@ const Profile = ({ user, posts }) => {
 
   const removeProfilePic = () => {
     user.updateProfile({ photoURL: null });
+    console.log("breakpoint");
   };
 
-  const changeProfilePic = () => {
-    if (!image) return;
-    const uploadTask = storage
-      .ref(`avatars/${image.name + image.lastModifiedDate + image.size}`)
-      .put(image);
-    uploadTask.on(
-      "state_changed",
-      (snpashot) => {},
-      (err) => {
-        console.log(err);
-        alert(err.message);
-      },
-      () => {
-        storage
-          .ref("avatars")
-          .child(image.name + image.lastModifiedDate + image.size)
-          .getDownloadURL()
-          .then((url) => {
-            user.updateProfile({ photoURL: url });
-          });
-      }
-    );
-  };
   useEffect(() => {
     window.addEventListener("resize", resizeAvatar);
 
@@ -145,8 +127,10 @@ const Profile = ({ user, posts }) => {
             ref={fileRef}
             style={{ display: "none" }}
             onChange={(e) => {
-              if (e.target.files[0]) setImage(e.target.files[0]);
-              changeProfilePic();
+              if (e.target.files[0]) {
+                setImage(e.target.files[0]);
+                setIsUploadAvatarOpen(true);
+              }
             }}
           />
           <Button
@@ -157,7 +141,7 @@ const Profile = ({ user, posts }) => {
           </Button>
           <Button
             style={{ color: "#ed4956", fontWeight: 700 }}
-            onClick={removeProfilePic}
+            onClick={() => setIsRemoveOpen(true)}
           >
             Remove Current Photo
           </Button>
@@ -169,6 +153,19 @@ const Profile = ({ user, posts }) => {
           </Button>
         </div>
       </Modal>
+      <Confirm
+        open={isRemoveOpen}
+        onClose={() => setIsRemoveOpen(false)}
+        title="Alert !"
+        text="Are you sure that you want to remove profile picture ?"
+        onConfirm={removeProfilePic}
+      />
+      <AvatarModal
+        isOpen={isUploadAvatarOpen}
+        setIsOpen={setIsUploadAvatarOpen}
+        image={image}
+        user={user}
+      />
     </>
   );
 };

@@ -25,6 +25,7 @@
   border-radius: 50%;
   transition: 0.4s;
   transform: scale(0);
+  cursor: pointer;
 }
 .profile__avatarBadge {
   transition: 0.4s;
@@ -116,7 +117,7 @@
 .updateProfile {
   display: flex;
   flex-direction: column;
-  height: 0;
+  height: 100%;
   overflow: hidden;
   animation: heightGrowth 0.7s;
 }
