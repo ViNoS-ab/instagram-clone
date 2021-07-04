@@ -34,6 +34,26 @@
   color: #262626;
   line-height: 18px;
 }
+.post__actions {
+  display: flex;
+  flex-direction: row;
+  margin: 5px 0;
+}
+
+.comment {
+  margin-left: 15px;
+  transform: scaleX(-1);
+}
+.post__action {
+  height: 26px;
+  width: 26px;
+  cursor: pointer;
+}
+.like,
+.comment {
+  height: 100%;
+  width: 100%;
+}
 .post__comments {
   padding: 15px;
 }

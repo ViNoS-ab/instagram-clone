@@ -1,5 +1,5 @@
 import { Avatar, Button } from "@material-ui/core";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { auth } from "./firebase";
 import { Link, useLocation } from "react-router-dom";
 import SignUp from "./Modal";
@@ -21,21 +21,20 @@ const Header = ({ user, setUser }) => {
   const avatarStyle =
     location.pathname === "/profile"
       ? {
-          height: "20px",
-          width: "20px",
+          height: "22px",
+          width: "22px",
           border: "2px solid #424242",
           padding: "1px",
-          marginLeft: "12px",
+          marginLeft: "22px",
         }
       : {
-          height: "23px",
-          width: "23px",
+          height: "22px",
+          width: "22px",
+          marginLeft: "22px",
+          border: "2px solid #fff",
+          padding: "1px",
         };
 
-  useEffect(() => {
-    if (location.pathname === "/profile") {
-    }
-  });
   return (
     <div className="header">
       <Link to="/">
@@ -68,7 +67,7 @@ const Header = ({ user, setUser }) => {
             style={avatarStyle}
             src={user.photoURL}
             children={user?.displayName?.split("")[0]}
-            alt="username"
+            alt="avatar"
             onClick={() => {
               setIsProfileOption(true);
               optionContain?.current?.toggleAttribute("hidden");

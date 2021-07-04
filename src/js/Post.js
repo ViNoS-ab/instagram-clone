@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import firebase from "firebase";
 import { Avatar } from "@material-ui/core";
 import "../css/Post.css";
 import { db } from "./firebase";
+import like from "../assets/heart.png";
+// import likeD from "../assets/heartLiked.png";
+import commentBtn from "../assets/comment.png";
 // import preload from "../assets/preload.jpg";
 import useGetData from "./useGetData";
 
@@ -11,11 +14,19 @@ const avatarStyle = {
   width: "32px",
 };
 
-const Post = ({ user, avatar, image, username, caption, postId }) => {
+const Post = ({
+  user,
+  avatar,
+  image,
+  username,
+  caption,
+  postId,
+  likes = 0,
+}) => {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
-
   const { documents: post } = useGetData(10, postId);
+  const postInput = useRef(null);
 
   const postComment = (e) => {
     e.preventDefault();
@@ -31,6 +42,17 @@ const Post = ({ user, avatar, image, username, caption, postId }) => {
     setComment("");
   };
 
+  const clickLike = () => {
+    db.collection("posts")
+      .doc(postId)
+      .set({
+        likedUsers: firebase.firestore.FieldValue.arrayUnion(user.uid),
+      });
+  };
+
+  const clickComment = () => {
+    postInput.current.focus();
+  };
   useEffect(() => {
     if (postId) {
       setComments(
@@ -55,15 +77,27 @@ const Post = ({ user, avatar, image, username, caption, postId }) => {
       </div>
 
       <img className="post__image" src={image} alt="post" />
-
+      <div style={{ padding: "0 15px" }}>
+        <div className="post__actions">
+          <span className="post__action" onClick={user && clickLike}>
+            <img src={like} alt="like" className="like" />
+          </span>
+          <span className="post__action" onClick={user && clickComment}>
+            <img src={commentBtn} alt="comment" className="comment" />
+          </span>
+        </div>
+        <p className="post__likesNum">{likes} likes</p>
+      </div>
       <h4 className="post__text">
-        <strong> {caption && username} </strong> {caption}
+        <strong className="post__username"> {caption && username} </strong>
+        {caption}
       </h4>
+
       <div className="post__comments">
         {comments.map(({ id, comment }) => {
           return (
             <p key={id}>
-              <strong>{comment.username} </strong>
+              <strong className="post__username">{comment.username} </strong>
               {comment.text}
             </p>
           );
@@ -76,6 +110,7 @@ const Post = ({ user, avatar, image, username, caption, postId }) => {
             type="text"
             placeholder="Add a comment..."
             className="post__input"
+            ref={postInput}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           />
