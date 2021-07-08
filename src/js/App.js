@@ -6,7 +6,6 @@ import Header from "./header";
 import Post from "./Post";
 import Profile from "./Profile";
 import useGetData from "./useGetData";
-import { Button } from "@material-ui/core";
 
 const postId = "rf0MU0nJIVVkBhUWMrzV";
 
@@ -15,14 +14,19 @@ function App() {
   const [user, setUser] = useState(null);
   const [sidePost, setSidePost] = useState(null);
 
-  const { documents, increasePostLimit } = useGetData(4);
+  const { documents } = useGetData(4);
 
   //load a specific post using it's id
   useEffect(() => {
-    (async () => {
-      const thatPost = await db.collection("posts").doc(postId).get();
-      setSidePost({ id: thatPost.id, comment: thatPost.data() });
-    })();
+    const unsubscribe = db
+      .collection("posts")
+      .doc(postId)
+      .onSnapshot((snap) =>
+        setSidePost({ id: snap.id, thatPostData: snap.data() })
+      );
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   // gets all posts
@@ -46,18 +50,25 @@ function App() {
           <Route exact path="/">
             <div className="app__posts">
               <div className="app__postsRight">
-                <Post
-                  user={user}
-                  postId={postId}
-                  username={sidePost?.comment?.username}
-                  caption={sidePost?.comment?.caption}
-                  image={sidePost?.comment?.image}
-                  id={sidePost?.id}
-                />
+                {sidePost?.thatPostData && (
+                  <Post
+                    user={user}
+                    postId={postId}
+                    image={sidePost?.thatPostData?.image}
+                    username={sidePost?.thatPostData?.username}
+                    caption={sidePost?.thatPostData?.caption}
+                    avatar={sidePost?.thatPostData?.avatar}
+                    likedUsers={sidePost?.thatPostData?.likedUsers}
+                    uid={sidePost?.thatPostData?.uid}
+                  />
+                )}
               </div>
               <div className="app__postsLeft">
                 {posts.map(
-                  ({ id, post: { image, username, caption, avatar } }) => {
+                  ({
+                    id,
+                    post: { uid, image, username, caption, avatar, likedUsers },
+                  }) => {
                     return (
                       <Post
                         user={user}
@@ -67,11 +78,12 @@ function App() {
                         username={username}
                         caption={caption}
                         avatar={avatar}
+                        likedUsers={likedUsers}
+                        uid={uid}
                       />
                     );
                   }
                 )}
-                <Button onClick={increasePostLimit}>load previous posts</Button>
               </div>
             </div>
           </Route>

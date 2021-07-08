@@ -45,6 +45,7 @@ const ImageUpload = ({ user, username, isOpen, setisOpen }) => {
               image: url,
               caption,
               uid: user.uid,
+              likedUsers: [],
               createdAt: firebase.firestore.FieldValue.serverTimestamp(),
               avatar: user.photoURL || null,
             });

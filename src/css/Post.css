@@ -17,10 +17,12 @@
   padding: 15px;
 }
 
-.post__header {
-  padding: 15px;
+.post__header,
+.post__header > div {
+  padding: 7px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 .post__avatar {
@@ -33,6 +35,17 @@
   font-weight: 600;
   color: #262626;
   line-height: 18px;
+}
+.post__options {
+  position: relative;
+  border: none;
+  right: 0;
+  background: none;
+  cursor: pointer;
+}
+.post__options > img {
+  height: 22px;
+  width: 18px;
 }
 .post__actions {
   display: flex;
@@ -82,6 +95,7 @@
 .post__button:disabled {
   opacity: 0.5;
 }
+
 @media only screen and (max-width: 700px) {
   .post {
     margin: 0;
