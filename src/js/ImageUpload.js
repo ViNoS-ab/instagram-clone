@@ -49,6 +49,11 @@ const ImageUpload = ({ user, username, isOpen, setisOpen }) => {
               createdAt: firebase.firestore.FieldValue.serverTimestamp(),
               avatar: user.photoURL || null,
             });
+          })
+          .then(() => {
+            db.doc("posts/number-of-posts").update({
+              [user.uid]: firebase.firestore.FieldValue.increment(1),
+            });
           });
         setImage(null);
         setProgress(0);

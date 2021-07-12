@@ -25,6 +25,8 @@ const Post = ({
   postId,
   likedUsers,
   uid,
+  setReRender,
+  reRender,
 }) => {
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState("");
@@ -52,17 +54,8 @@ const Post = ({
     db.collection("posts").doc(postId).delete();
   };
 
-  const clickLike = () => {
-    if (likedUsers?.includes(user.uid)) {
-      db.collection("posts")
-        .doc(postId)
-        .update(
-          {
-            likedUsers: firebase.firestore.FieldValue.arrayRemove(user.uid),
-          },
-          { merge: true }
-        );
-    } else if (!likedUsers?.includes(user.uid)) {
+  const clickLike = (e) => {
+    if (!likedUsers?.includes(user.uid)) {
       db.collection("posts")
         .doc(postId)
         .update(
@@ -71,11 +64,22 @@ const Post = ({
           },
           { merge: true }
         );
+    } else if (e.target.tagName !== "IMG") {
+      db.collection("posts")
+        .doc(postId)
+        .update(
+          {
+            likedUsers: firebase.firestore.FieldValue.arrayRemove(user.uid),
+          },
+          { merge: true }
+        );
     }
+    setReRender && setReRender(!reRender);
   };
 
   const clickComment = () => {
     postInput.current.focus();
+    setReRender && setReRender(!reRender);
   };
   useEffect(() => {
     if (postId) {
@@ -104,19 +108,27 @@ const Post = ({
           <button
             className="post__options"
             aria-label="more options"
-            onClick={() => setIsOptionOpen(true)}
+            onClick={() => {
+              setIsOptionOpen(true);
+              setReRender && setReRender(!reRender);
+            }}
           >
             <img src={more} alt="more" />
           </button>
         )}
       </div>
 
-      <img className="post__image" src={image} alt="post" />
+      <img
+        className="post__image"
+        src={image}
+        alt="post"
+        onDoubleClick={user && clickLike}
+      />
       <div style={{ padding: "0 15px" }}>
         <div className="post__actions">
           <span className="post__action" onClick={user && clickLike}>
             <img
-              src={likedUsers?.includes(user.uid) ? likeD : like}
+              src={likedUsers?.includes(user?.uid) ? likeD : like}
               alt="like"
               className="like"
             />
@@ -158,7 +170,10 @@ const Post = ({
           <button
             type="submit"
             className="post__button"
-            onClick={postComment}
+            onClick={() => {
+              postComment();
+              setReRender && setReRender(!reRender);
+            }}
             disabled={!comment}
           >
             Post

@@ -7,7 +7,7 @@ import {
   Modal,
 } from "@material-ui/core";
 import React, { useEffect, useRef, useState } from "react";
-import { auth, firebase } from "./firebase";
+import { auth, firebase, db } from "./firebase";
 import "../css/Profile.css";
 import addProfiePic from "../assets/addProfilePic.png";
 import Confirm from "./Confirm";
@@ -52,8 +52,15 @@ const Profile = ({ user, posts }) => {
   }, [posts, user.uid]);
 
   useEffect(() => {
-    setPostCount(myPosts.length);
-  }, [myPosts.length]);
+    const unsubscrib = db
+      .collection("posts")
+      .doc("number-of-posts")
+      .onSnapshot((snap) => setPostCount(snap.data()[user.uid] || 0));
+    return () => {
+      unsubscrib();
+    };
+  }, [user.uid]);
+
   return (
     <>
       <div className="profile">

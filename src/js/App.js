@@ -12,23 +12,24 @@ const postId = "rf0MU0nJIVVkBhUWMrzV";
 function App() {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
-  const [sidePost, setSidePost] = useState(null);
+  const [reRender, setReRender] = useState(false);
+  const [
+    {
+      thatPostData: { uid, image, username, caption, avatar, likedUsers },
+    },
+    setSidePost,
+  ] = useState({ thatPostData: {} });
 
   const { documents } = useGetData(4);
 
-  //load a specific post using it's id
-  useEffect(() => {
-    const unsubscribe = db
-      .collection("posts")
-      .doc(postId)
-      .onSnapshot((snap) =>
-        setSidePost({ id: snap.id, thatPostData: snap.data() })
-      );
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  //load a specific post using its id
 
+  useEffect(() => {
+    (async () => {
+      const thatPost = await db.collection("posts").doc(postId).get();
+      setSidePost({ id: thatPost.id, thatPostData: thatPost.data() });
+    })();
+  }, [reRender]);
   // gets all posts
   useEffect(() => {
     setPosts(
@@ -50,16 +51,18 @@ function App() {
           <Route exact path="/">
             <div className="app__posts">
               <div className="app__postsRight">
-                {sidePost?.thatPostData && (
+                {image && (
                   <Post
                     user={user}
                     postId={postId}
-                    image={sidePost?.thatPostData?.image}
-                    username={sidePost?.thatPostData?.username}
-                    caption={sidePost?.thatPostData?.caption}
-                    avatar={sidePost?.thatPostData?.avatar}
-                    likedUsers={sidePost?.thatPostData?.likedUsers}
-                    uid={sidePost?.thatPostData?.uid}
+                    image={image}
+                    username={username}
+                    caption={caption}
+                    avatar={avatar}
+                    likedUsers={likedUsers}
+                    uid={uid}
+                    setReRender={setReRender}
+                    reRender={reRender}
                   />
                 )}
               </div>
