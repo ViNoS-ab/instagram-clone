@@ -10,9 +10,12 @@ const useGetData = (limit, postId) => {
   const increasePostLimit = () => {
     if (
       //detetcs if the user scroled to bottom
+      // document.documentElement.scrollHeight -
+      //   document.documentElement.scrollTop ===
+      // document.documentElement.clientHeight
+      document.documentElement.scrollTop >=
       document.documentElement.scrollHeight -
-        document.documentElement.scrollTop ===
-      document.documentElement.clientHeight
+        document.documentElement.clientHeight
     ) {
       if (documents.some((el, i) => el.id !== prevDocuments[i]?.id))
         setPostsLimit(postsLimit + limit);

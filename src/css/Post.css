@@ -4,12 +4,49 @@
   border: 1px solid lightgray;
   margin-bottom: 45px;
 }
+.post__imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .post__image {
   width: 100%;
   object-fit: contain;
   margin: auto;
   border-top: 1px solid lightgray;
   border-bottom: 1px solid lightgray;
+}
+
+.post__image_like {
+  position: absolute;
+  filter: brightness(5) drop-shadow(2px 2px 2px rgb(51, 51, 51));
+  animation: likeGrowing 1s linear;
+  height: 100px;
+  width: 100px;
+  z-index: 1;
+}
+@keyframes likeGrowing {
+  0%,
+  to {
+    opacity: 0;
+    -webkit-transform: translate(-50%, -50%) scale(0);
+    transform: scale(0);
+  }
+  15% {
+    opacity: 0.9;
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+  30% {
+    -webkit-transform: scale(0.95);
+    transform: scale(0.95);
+  }
+  45%,
+  80% {
+    opacity: 0.9;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
 }
 
 .post__text {

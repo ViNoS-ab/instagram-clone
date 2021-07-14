@@ -34,6 +34,7 @@ const Post = ({
   const postInput = useRef(null);
   const [isOptionOpen, setIsOptionOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
   const postComment = (e) => {
     e.preventDefault();
@@ -64,7 +65,7 @@ const Post = ({
           },
           { merge: true }
         );
-    } else if (e.target.tagName !== "IMG") {
+    } else if (e.target.className !== "post__image") {
       db.collection("posts")
         .doc(postId)
         .update(
@@ -117,13 +118,22 @@ const Post = ({
           </button>
         )}
       </div>
-
-      <img
-        className="post__image"
-        src={image}
-        alt="post"
-        onDoubleClick={user && clickLike}
-      />
+      <div className="post__imageContainer">
+        {isLiked && <img className="post__image_like" src={likeD} alt="like" />}
+        <img
+          className="post__image"
+          src={image}
+          alt="post"
+          onDoubleClick={(e) => {
+            if (!user) return;
+            clickLike(e);
+            setIsLiked(true);
+            setTimeout(() => {
+              setIsLiked(false);
+            }, 1000);
+          }}
+        />
+      </div>
       <div style={{ padding: "0 15px" }}>
         <div className="post__actions">
           <span className="post__action" onClick={user && clickLike}>

@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "instgram-clone-ddc87"
+  },
+  "targets": {
+    "instgram-clone-ddc87": {
+      "hosting": {
+        "insta": [
+          "insatgraam-clone"
+        ]
+      }
+    }
   }
 }
